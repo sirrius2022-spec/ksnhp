@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>토목현장 감리 개인 홈페이지</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Noto Sans KR"', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            900: '#0c4a6e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f8fafc;
+            color: #334155;
+            line-height: 1.6;
+        }
+        .hero-pattern {
+            background-color: #1e293b;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23334155' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        .section-title {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 2rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 50%;
+            height: 4px;
+            background-color: #0ea5e9;
+            border-radius: 2px;
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 50;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .modal.active {
+            display: flex;
+            opacity: 1;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 0.5rem;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease;
+        }
+        .modal.active .modal-content {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <i class="fa-solid fa-helmet-safety text-brand-600 text-2xl mr-2"></i>
+                    <span class="font-bold text-xl text-slate-800 tracking-tight">토목감리 포트폴리오</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#about" class="text-slate-600 hover:text-brand-600 font-medium transition-colors">소개</a>
+                    <a href="#projects" class="text-slate-600 hover:text-brand-600 font-medium transition-colors">프로젝트</a>
+                    <a href="#tools" class="text-slate-600 hover:text-brand-600 font-medium transition-colors">업무 툴</a>
+                    <a href="#contact" class="text-slate-600 hover:text-brand-600 font-medium transition-colors">연락처</a>
+                </div>
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-slate-600 hover:text-slate-900 focus:outline-none p-2">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-slate-100 pb-4">
+            <a href="#about" class="block px-4 py-2 text-slate-600 hover:bg-slate-50 hover:text-brand-600">소개</a>
+            <a href="#projects" class="block px-4 py-2 text-slate-600 hover:bg-slate-50 hover:text-brand-600">프로젝트</a>
+            <a href="#tools" class="block px-4 py-2 text-slate-600 hover:bg-slate-50 hover:text-brand-600">업무 툴</a>
+            <a href="#contact" class="block px-4 py-2 text-slate-600 hover:bg-slate-50 hover:text-brand-600">연락처</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero-pattern text-white py-20 lg:py-32">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center">
+            <div class="md:w-1/2 mb-10 md:mb-0">
+                <h1 class="text-4xl lg:text-5xl font-black leading-tight mb-4">
+                    안전하고 완벽한 <br>
+                    <span class="text-brand-500">인프라 구축</span>을 위한<br>
+                    전문 토목감리
+                </h1>
+                <p class="text-lg text-slate-300 mb-8 max-w-lg">
+                    수년간의 현장 경험을 바탕으로 철저한 품질 관리와 공정 관리, 그리고 무엇보다 안전을 최우선으로 생각합니다. 성공적인 프로젝트 완수를 약속드립니다.
+                </p>
+                <div class="flex space-x-4">
+                    <a href="#projects" class="bg-brand-600 hover:bg-brand-500 text-white font-bold py-3 px-6 rounded-lg transition-colors shadow-lg">
+                        실적 보기
+                    </a>
+                    <a href="#tools" class="bg-slate-700 hover:bg-slate-600 text-white font-bold py-3 px-6 rounded-lg transition-colors border border-slate-600">
+                        업무 툴 활용
+                    </a>
+                </div>
+            </div>
+            <div class="md:w-1/2 flex justify-center">
+                <!-- Using a placeholder image related to civil engineering -->
+                <div class="relative w-72 h-72 lg:w-96 lg:h-96 rounded-full overflow-hidden border-4 border-brand-500 shadow-2xl flex items-center justify-center bg-slate-800">
+                     <i class="fa-solid fa-user-tie text-8xl text-slate-400"></i>
+                     <!-- To replace with an actual photo later: <img src="profile.jpg" alt="프로필 사진" class="object-cover w-full h-full"> -->
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl section-title">자기 소개</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 mt-8">
+                <div>
+                    <h3 class="text-2xl font-bold text-slate-800 mb-4">현장의 가치를 높이는 감리원, <span class="text-brand-600">[이름 입력]</span>입니다.</h3>
+                    <p class="text-slate-600 mb-4">
+                        [년수]년 이상의 토목 현장 경험을 통해 도로, 교량, 터널 등 다양한 인프라 프로젝트의 감리를 수행해 왔습니다. 단순한 감독을 넘어, 발주처와 시공사 간의 원활한 소통을 이끌고 문제 발생 시 선제적인 해결책을 제시하는 파트너 역할을 지향합니다.
+                    </p>
+                    <p class="text-slate-600 mb-6">
+                        최신 스마트 건설 기술과 드론, 3D 모델링 등을 적극 도입하여 감리 업무의 효율성과 정확도를 높이는데 관심이 많습니다. 이 홈페이지는 저의 포트폴리오이자, 현장 업무를 보조하는 개인적인 툴로 활용될 예정입니다.
+                    </p>
+                    
+                    <div class="flex items-center text-slate-700 mb-2">
+                        <i class="fa-solid fa-graduation-cap w-8 text-brand-600 text-center"></i>
+                        <span>[출신 학교/전공] 학사/석사</span>
+                    </div>
+                    <div class="flex items-center text-slate-700 mb-2">
+                        <i class="fa-solid fa-certificate w-8 text-brand-600 text-center"></i>
+                        <span>토목기사 / 건설안전기사 / [기타 자격증]</span>
+                    </div>
+                    <div class="flex items-center text-slate-700">
+                        <i class="fa-solid fa-briefcase w-8 text-brand-600 text-center"></i>
+                        <span>현) [소속 회사명] - [직급]</span>
+                    </div>
+                </div>
+                
+                <div class="bg-slate-50 p-6 rounded-xl border border-slate-100">
+                    <h4 class="text-xl font-bold text-slate-800 mb-6">핵심 역량</h4>
+                    
+                    <div class="mb-4">
+                        <div class="flex justify-between mb-1">
+                            <span class="text-sm font-medium text-slate-700">품질 관리 (Q.C)</span>
+                            <span class="text-sm font-medium text-brand-600">95%</span>
+                        </div>
+                        <div class="w-full bg-slate-200 rounded-full h-2.5">
+                            <div class="bg-brand-600 h-2.5 rounded-full" style="width: 95%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <div class="flex justify-between mb-1">
+                            <span class="text-sm font-medium text-slate-700">공정 관리 (Schedule)</span>
+                            <span class="text-sm font-medium text-brand-600">90%</span>
+                        </div>
+                        <div class="w-full bg-slate-200 rounded-full h-2.5">
+                            <div class="bg-brand-600 h-2.5 rounded-full" style="width: 90%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <div class="flex justify-between mb-1">
+                            <span class="text-sm font-medium text-slate-700">안전 관리 (Safety)</span>
+                            <span class="text-sm font-medium text-brand-600">98%</span>
+                        </div>
+                        <div class="w-full bg-slate-200 rounded-full h-2.5">
+                            <div class="bg-brand-600 h-2.5 rounded-full" style="width: 98%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <div class="flex justify-between mb-1">
+                            <span class="text-sm font-medium text-slate-700">설계 검토 (Design Review)</span>
+                            <span class="text-sm font-medium text-brand-600">85%</span>
+                        </div>
+                        <div class="w-full bg-slate-200 rounded-full h-2.5">
+                            <div class="bg-brand-600 h-2.5 rounded-full" style="width: 85%"></div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <span class="text-sm font-medium text-slate-700">CAD 및 스마트 건설 툴</span>
+                            <span class="text-sm font-medium text-brand-600">80%</span>
+                        </div>
+                        <div class="w-full bg-slate-200 rounded-full h-2.5">
+                            <div class="bg-brand-600 h-2.5 rounded-full" style="width: 80%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-20 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-end mb-8">
+                <h2 class="text-3xl section-title mb-0">주요 수행 프로젝트</h2>
+                <button onclick="openModal('projectModal')" class="text-sm bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 font-medium py-2 px-4 rounded transition-colors shadow-sm">
+                    <i class="fa-solid fa-plus mr-1"></i> 새 프로젝트 추가
+                </button>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
+                <!-- Project Card 1 -->
+                <div class="bg-white rounded-xl overflow-hidden border border-slate-200 card-hover">
+                    <div class="h-48 bg-slate-200 relative">
+                        <img src="https://placehold.co/600x400/1e293b/ffffff?text=Highway+Project" alt="Project 1" class="w-full h-full object-cover">
+                        <div class="absolute top-4 right-4 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded">완료</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-slate-800 mb-2">OO~OO간 고속도로 건설공사 (제O공구)</h3>
+                        <p class="text-sm text-slate-500 mb-4"><i class="fa-regular fa-calendar mr-2"></i>2020.03 - 2023.12</p>
+                        <p class="text-slate-600 text-sm mb-4 line-clamp-3">
+                            총 연장 O.Okm, 교량 O개소, 터널 O개소를 포함하는 대규모 고속도로 신설 프로젝트. 전면 책임감리원으로 참여하여 터널 굴착 시 연약지반 대처 및 교량 상부공 슬래브 품질 확보에 기여함.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">고속도로</span>
+                            <span class="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded">터널</span>
+                            <span class="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded">교량</span>
+                        </div>
+                        <a href="#" class="text-brand-600 hover:text-brand-800 font-medium text-sm flex items-center">
+                            상세 보기 <i class="fa-solid fa-arrow-right ml-1"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Project Card 2 -->
+                <div class="bg-white rounded-xl overflow-hidden border border-slate-200 card-hover">
+                    <div class="h-48 bg-slate-200 relative">
+                        <img src="https://placehold.co/600x400/1e293b/ffffff?text=Bridge+Construction" alt="Project 2" class="w-full h-full object-cover">
+                        <div class="absolute top-4 right-4 bg-brand-500 text-white text-xs font-bold px-2 py-1 rounded">진행중</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-slate-800 mb-2">OO대교 가설 및 접속도로 공사</h3>
+                        <p class="text-sm text-slate-500 mb-4"><i class="fa-regular fa-calendar mr-2"></i>2024.01 - 현재</p>
+                        <p class="text-slate-600 text-sm mb-4 line-clamp-3">
+                            해상 교량 및 접속도로 건설 공사. 주두부 및 캔틸레버 공법(FCM) 시공 감리, 해상 장비 안전 관리 및 콘크리트 해수 노출에 따른 염해 방지 대책 검토를 중점적으로 수행 중.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">해상교량</span>
+                            <span class="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded">FCM공법</span>
+                        </div>
+                        <a href="#" class="text-brand-600 hover:text-brand-800 font-medium text-sm flex items-center">
+                            상세 보기 <i class="fa-solid fa-arrow-right ml-1"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Project Card 3 -->
+                <div class="bg-white rounded-xl overflow-hidden border border-slate-200 card-hover flex flex-col justify-center items-center h-full min-h-[400px] border-dashed border-2 border-slate-300 hover:border-brand-500 cursor-pointer" onclick="openModal('projectModal')">
+                    <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4 text-slate-400 group-hover:text-brand-500 group-hover:bg-brand-50 transition-colors">
+                        <i class="fa-solid fa-plus text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-600">새 프로젝트 추가</h3>
+                    <p class="text-sm text-slate-400 mt-2 text-center px-6">향후 진행될 현장이나 과거 실적을 추가할 수 있습니다.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Field Work Tools Section -->
+    <section id="tools" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl section-title">현장 업무 툴 (업데이트 예정)</h2>
+            <p class="text-slate-600 mb-8 max-w-3xl">
+                이 공간은 단순한 소개를 넘어, 실제 현장에서 스마트폰이나 태블릿으로 접속하여 빠르게 사용할 수 있는 간단한 계산기나 체크리스트를 모아두는 곳입니다. 현재는 샘플만 구현되어 있으며 지속적으로 기능을 추가할 예정입니다.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Tool 1: Concrete Volume Calculator -->
+                <div class="bg-slate-50 rounded-xl p-6 border border-slate-200">
+                    <div class="w-12 h-12 bg-brand-100 text-brand-600 rounded-lg flex items-center justify-center mb-4 text-xl">
+                        <i class="fa-solid fa-calculator"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-800 mb-2">콘크리트 물량 계산기</h3>
+                    <p class="text-sm text-slate-600 mb-4 h-10">간단한 체적(가로x세로x높이) 계산 및 할증률 적용 물량 산출.</p>
+                    <button onclick="openModal('calcModal')" class="w-full bg-white hover:bg-slate-100 text-brand-600 border border-brand-200 font-medium py-2 px-4 rounded transition-colors text-sm text-center">
+                        실행하기
+                    </button>
+                </div>
+
+                <!-- Tool 2: Weather & Fine Dust -->
+                <div class="bg-slate-50 rounded-xl p-6 border border-slate-200">
+                    <div class="w-12 h-12 bg-sky-100 text-sky-600 rounded-lg flex items-center justify-center mb-4 text-xl">
+                        <i class="fa-solid fa-cloud-sun-rain"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-800 mb-2">현장 날씨 정보</h3>
+                    <p class="text-sm text-slate-600 mb-4 h-10">타설 등 주요 공정을 위한 기상청 데이터 연동 (예정).</p>
+                    <button class="w-full bg-slate-200 text-slate-500 font-medium py-2 px-4 rounded cursor-not-allowed text-sm text-center">
+                        준비중
+                    </button>
+                </div>
+
+                <!-- Tool 3: Safety Checklist -->
+                <div class="bg-slate-50 rounded-xl p-6 border border-slate-200">
+                    <div class="w-12 h-12 bg-red-100 text-red-600 rounded-lg flex items-center justify-center mb-4 text-xl">
+                        <i class="fa-solid fa-clipboard-check"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-800 mb-2">일일 안전 점검표</h3>
+                    <p class="text-sm text-slate-600 mb-4 h-10">모바일에서 체크하고 PDF로 저장/공유하는 기능 (예정).</p>
+                    <button class="w-full bg-slate-200 text-slate-500 font-medium py-2 px-4 rounded cursor-not-allowed text-sm text-center">
+                        준비중
+                    </button>
+                </div>
+
+                <!-- Tool 4: Specs Search -->
+                <div class="bg-slate-50 rounded-xl p-6 border border-slate-200">
+                    <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-lg flex items-center justify-center mb-4 text-xl">
+                        <i class="fa-solid fa-book-bookmark"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-800 mb-2">자주 찾는 시방서</h3>
+                    <p class="text-sm text-slate-600 mb-4 h-10">주요 공종별 표준시방서 핵심 내용 빠른 검색 (예정).</p>
+                    <button class="w-full bg-slate-200 text-slate-500 font-medium py-2 px-4 rounded cursor-not-allowed text-sm text-center">
+                        준비중
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-slate-900 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div>
+                    <h2 class="text-3xl font-bold mb-6 relative inline-block">
+                        연락처
+                        <span class="absolute bottom-0 left-0 w-1/2 h-1 bg-brand-500"></span>
+                    </h2>
+                    <p class="text-slate-400 mb-8">
+                        프로젝트 문의, 업무 제휴 또는 기술적인 논의를 환영합니다. 아래 연락처로 연락 주시면 확인 후 회신 드리겠습니다.
+                    </p>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-start">
+                            <i class="fa-solid fa-envelope mt-1 text-brand-500 w-6"></i>
+                            <div>
+                                <h4 class="font-medium text-slate-200">이메일</h4>
+                                <a href="mailto:engineer@example.com" class="text-slate-400 hover:text-white transition-colors">engineer@example.com</a>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fa-solid fa-phone mt-1 text-brand-500 w-6"></i>
+                            <div>
+                                <h4 class="font-medium text-slate-200">연락처</h4>
+                                <p class="text-slate-400">010-XXXX-XXXX (업무용)</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fa-solid fa-location-dot mt-1 text-brand-500 w-6"></i>
+                            <div>
+                                <h4 class="font-medium text-slate-200">현재 현장 / 근무지</h4>
+                                <p class="text-slate-400">[현재 지역 또는 현장명 입력]</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <!-- Simple Contact Form -->
+                    <form class="bg-slate-800 p-6 rounded-xl" onsubmit="event.preventDefault(); alertCustom('메시지가 전송되었습니다. (테스트)');">
+                        <div class="mb-4">
+                            <label for="name" class="block text-sm font-medium text-slate-300 mb-1">이름 / 소속</label>
+                            <input type="text" id="name" class="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-brand-500" placeholder="홍길동 / OO건설">
+                        </div>
+                        <div class="mb-4">
+                            <label for="email" class="block text-sm font-medium text-slate-300 mb-1">이메일</label>
+                            <input type="email" id="email" class="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-brand-500" placeholder="email@example.com">
+                        </div>
+                        <div class="mb-4">
+                            <label for="message" class="block text-sm font-medium text-slate-300 mb-1">내용</label>
+                            <textarea id="message" rows="4" class="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-brand-500" placeholder="문의하실 내용을 입력해주세요."></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-bold py-3 px-4 rounded-lg transition-colors">
+                            메시지 보내기
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-950 py-8 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-slate-500 text-sm">
+                &copy; 2026 [이름 입력] Civil Engineer Supervisor Portfolio. All rights reserved.
+            </p>
+            <p class="text-slate-600 text-xs mt-2">
+                이 사이트는 현장 업무 효율화를 위한 개인 툴용도로 지속적으로 업데이트 됩니다.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Custom Alert/Message Box Modal -->
+    <div id="msgModal" class="modal">
+        <div class="modal-content text-center py-8">
+            <i class="fa-solid fa-circle-check text-4xl text-green-500 mb-4"></i>
+            <h3 id="msgText" class="text-xl font-bold text-slate-800 mb-6">메시지</h3>
+            <button onclick="closeModal('msgModal')" class="bg-brand-600 hover:bg-brand-500 text-white font-bold py-2 px-6 rounded-lg transition-colors">
+                확인
+            </button>
+        </div>
+    </div>
+
+    <!-- Add Project Modal -->
+    <div id="projectModal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-slate-800">새 프로젝트 추가 (준비중)</h3>
+                <button onclick="closeModal('projectModal')" class="text-slate-500 hover:text-slate-800">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            <p class="text-slate-600 mb-4 text-sm">이 기능은 향후 데이터베이스 연동 후 활성화될 예정입니다. 지금은 UI 틀만 제공됩니다.</p>
+            <form onsubmit="event.preventDefault(); closeModal('projectModal'); alertCustom('데이터베이스 연결 후 사용 가능합니다.');">
+                <div class="mb-3">
+                    <label class="block text-sm font-medium text-slate-700 mb-1">프로젝트명</label>
+                    <input type="text" class="w-full border border-slate-300 rounded px-3 py-2 text-sm focus:outline-none focus:border-brand-500">
+                </div>
+                <div class="grid grid-cols-2 gap-3 mb-3">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">시작일</label>
+                        <input type="date" class="w-full border border-slate-300 rounded px-3 py-2 text-sm focus:outline-none focus:border-brand-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">종료일(예정)</label>
+                        <input type="date" class="w-full border border-slate-300 rounded px-3 py-2 text-sm focus:outline-none focus:border-brand-500">
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-slate-700 mb-1">주요 업무</label>
+                    <textarea rows="3" class="w-full border border-slate-300 rounded px-3 py-2 text-sm focus:outline-none focus:border-brand-500"></textarea>
+                </div>
+                <div class="flex justify-end gap-2">
+                    <button type="button" onclick="closeModal('projectModal')" class="px-4 py-2 border border-slate-300 text-slate-700 rounded hover:bg-slate-50 text-sm font-medium">취소</button>
+                    <button type="submit" class="px-4 py-2 bg-brand-600 text-white rounded hover:bg-brand-500 text-sm font-medium">저장</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Concrete Calculator Modal -->
+    <div id="calcModal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-4 border-b pb-2">
+                <h3 class="text-xl font-bold text-slate-800"><i class="fa-solid fa-calculator mr-2 text-brand-600"></i>콘크리트 타설 물량 계산</h3>
+                <button onclick="closeModal('calcModal')" class="text-slate-500 hover:text-slate-800">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            
+            <div class="space-y-4">
+                <div class="grid grid-cols-3 gap-3">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">가로 (m)</label>
+                        <input type="number" id="calcW" class="w-full border border-slate-300 rounded px-3 py-2 focus:border-brand-500 outline-none" value="0" min="0" step="0.1">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">세로 (m)</label>
+                        <input type="number" id="calcL" class="w-full border border-slate-300 rounded px-3 py-2 focus:border-brand-500 outline-none" value="0" min="0" step="0.1">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">높이/두께 (m)</label>
+                        <input type="number" id="calcH" class="w-full border border-slate-300 rounded px-3 py-2 focus:border-brand-500 outline-none" value="0" min="0" step="0.01">
+                    </div>
+                </div>
+                
+                <div class="flex items-center gap-4 border-t border-b py-3 border-slate-100">
+                    <div class="flex-1">
+                        <label class="block text-sm font-medium text-slate-700 mb-1">할증률 (%)</label>
+                        <select id="calcMargin" class="w-full border border-slate-300 rounded px-3 py-2 text-sm focus:border-brand-500 outline-none">
+                            <option value="1.0">0% (정미량)</option>
+                            <option value="1.01">1%</option>
+                            <option value="1.02">2%</option>
+                            <option value="1.03" selected>3% (일반)</option>
+                            <option value="1.05">5% (손실많음)</option>
+                        </select>
+                    </div>
+                    <button onclick="calculateConcrete()" class="flex-1 mt-6 bg-brand-600 hover:bg-brand-500 text-white font-bold py-2 px-4 rounded transition-colors">
+                        계산하기
+                    </button>
+                </div>
+                
+                <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-sm text-slate-600">정미 물량:</span>
+                        <span id="resultNet" class="font-mono text-lg font-semibold text-slate-800">0.00 m³</span>
+                    </div>
+                    <div class="flex justify-between items-center mb-2 border-b border-slate-200 pb-2">
+                        <span class="text-sm text-slate-600">할증 포함 (발주량):</span>
+                        <span id="resultGross" class="font-mono text-xl font-bold text-brand-600">0.00 m³</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-slate-600">레미콘 대수 (6루베 기준):</span>
+                        <span id="resultTrucks" class="font-mono text-lg font-semibold text-slate-800">0 대</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-4 flex justify-end">
+                <button onclick="closeModal('calcModal')" class="text-sm text-slate-500 hover:text-slate-800 bg-slate-100 px-4 py-2 rounded">닫기</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mobile menu toggle
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+
+        // Modal Functions
+        function openModal(id) {
+            document.getElementById(id).classList.add('active');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+        
+        function alertCustom(message) {
+            document.getElementById('msgText').innerText = message;
+            openModal('msgModal');
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('active');
+            }
+        }
+
+        // Concrete Calculator Logic
+        function calculateConcrete() {
+            const w = parseFloat(document.getElementById('calcW').value) || 0;
+            const l = parseFloat(document.getElementById('calcL').value) || 0;
+            const h = parseFloat(document.getElementById('calcH').value) || 0;
+            const margin = parseFloat(document.getElementById('calcMargin').value);
+
+            const netVolume = w * l * h;
+            const grossVolume = netVolume * margin;
+            
+            // Assume a standard ready-mix concrete truck holds 6m³
+            const trucks = Math.ceil(grossVolume / 6);
+
+            document.getElementById('resultNet').innerText = netVolume.toFixed(2) + ' m³';
+            document.getElementById('resultGross').innerText = grossVolume.toFixed(2) + ' m³';
+            document.getElementById('resultTrucks').innerText = trucks + ' 대';
+        }
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                menu.classList.add('hidden'); // Close mobile menu if open
+                
+                const targetId = this.getAttribute('href');
+                if(targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if(targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 64, // Offset for sticky navbar
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
